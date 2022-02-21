@@ -37,5 +37,5 @@ jobs:
       - run: apt-get update -qy
       - run: apt-get install -y ruby-dev
       - run: gem install dpl
-      - run: dpl --provider=heroku --app=tdt4242-ex2-frontend --api-key=$HEROKU_STAGING_API_KEY
-      - run: dpl --provider=heroku --app=tdt4242-ex2-backend --api-key=$HEROKU_STAGING_API_KEY
+      - run: dpl --provider=heroku --app=tdt4242-ex2-frontend --api-key=${{ secrets.HEROKU_STAGING_API_KEY }}
+      - run: dpl --provider=heroku --app=tdt4242-ex2-backend --api-key=${{ secrets.HEROKU_STAGING_API_KEY }}
