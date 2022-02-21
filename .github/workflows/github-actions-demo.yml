@@ -20,9 +20,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container: python:3.8
+    defaults:
+      run:
+        working-directory: ./backend/secfit
     steps:
     # this configures Django application to use attached postgres database that is run on `postgres` host
-      - working-directory: ./TDT4242-EX2/backend/secfit 
+      - uses: actions/checkout@v1
+      - working-directory: ./
         run: apt-get update -qy
       - run: pip install -r requirements.txt
 
