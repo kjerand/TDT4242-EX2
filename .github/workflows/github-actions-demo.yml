@@ -22,17 +22,17 @@ jobs:
     container: python:3.8
     steps:
     # this configures Django application to use attached postgres database that is run on `postgres` host
-      - cd backend/secfit
-      - apt-get update -qy
-      - pip install -r requirements.txt
+      - run: cd backend/secfit
+      - run: apt-get update -qy
+      - run: pip install -r requirements.txt
 
   staging:
     runs-on: ubuntu-latest
     type: deploy
     container: ruby
     steps:
-      - apt-get update -qy
-      - apt-get install -y ruby-dev
-      - gem install dpl
-      - dpl --provider=heroku --app=tdt4242-ex2-frontend --api-key=$HEROKU_STAGING_API_KEY
-      - dpl --provider=heroku --app=tdt4242-ex2-backend --api-key=$HEROKU_STAGING_API_KEY
+      - run: apt-get update -qy
+      - run: apt-get install -y ruby-dev
+      - run: gem install dpl
+      - run: dpl --provider=heroku --app=tdt4242-ex2-frontend --api-key=$HEROKU_STAGING_API_KEY
+      - run: dpl --provider=heroku --app=tdt4242-ex2-backend --api-key=$HEROKU_STAGING_API_KEY
