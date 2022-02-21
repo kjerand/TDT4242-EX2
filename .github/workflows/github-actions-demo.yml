@@ -28,7 +28,6 @@ jobs:
 
   staging:
     runs-on: ubuntu-latest
-    type: deploy
     container: ruby
     steps:
       - run: apt-get update -qy
