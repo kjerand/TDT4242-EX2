@@ -33,10 +33,11 @@ jobs:
   staging:
     runs-on: ubuntu-latest
     container: ruby
-        defaults:
+    defaults:
       run:
         working-directory: ./
     steps:
+      - uses: actions/checkout@v1
       - run: apt-get update -qy
       - run: apt-get install -y ruby-dev
       - run: gem install dpl
