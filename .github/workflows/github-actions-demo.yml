@@ -33,6 +33,9 @@ jobs:
   staging:
     runs-on: ubuntu-latest
     container: ruby
+        defaults:
+      run:
+        working-directory: ./
     steps:
       - run: apt-get update -qy
       - run: apt-get install -y ruby-dev
