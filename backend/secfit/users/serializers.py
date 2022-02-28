@@ -34,12 +34,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         password = data.get("password")
         password1 = data.get("password1")
 
-        print("HEI")
         try:
-            password_validation.validate_password(password, password_validators=[MinimumLengthValidator])
+            password_validation.validate_password(password)
         except forms.ValidationError as error:
             raise serializers.ValidationError(error.messages)
-        
+
         return value
 
     def create(self, validated_data):
