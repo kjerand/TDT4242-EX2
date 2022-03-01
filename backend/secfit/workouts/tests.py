@@ -28,9 +28,9 @@ class WorkoutPermissionsTest(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user1 = User.objects.create(username="Ola Nordmann", password="123")
-        self.user2 = User.objects.create(username="Ola Sørmann", password="123")
+        self.user2 = User.objects.create(username="Ola Sørmann", password="123", coach=self.user1)
         self.workout = Workout.objects.create(name="test", date="2012-09-04 06:00Z", notes="", owner=self.user1, visibility="PU")
-        self.workout2 = Workout.objects.create(name="test", date="2012-09-04 06:00Z", notes="", owner=self.user1, visibility="PR")
+        self.workout2 = Workout.objects.create(name="test", date="2012-09-04 06:00Z", notes="", owner=self.user2, visibility="PR")
 
 
         self.request1 = self.factory.get("/workout")
@@ -64,11 +64,12 @@ class WorkoutPermissionsTest(TestCase):
     
     
     
-    # def test_IsCoachOfWorkoutAndVisibleToCoach(self): 
+    def test_IsCoachAndVisibleToCoach(self): 
 
-    #     IsCoachAndVisibleToCoach_object = IsCoachAndVisibleToCoach()
+        IsCoachAndVisibleToCoach_object = IsCoachAndVisibleToCoach()
 
-    #     IsCoachAndVisibleToCoach.has_object_permission(IsCoachAndVisibleToCoach_object, self.request1, "veiw", self.user1)
+        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(IsCoachAndVisibleToCoach_object, self.request1, "veiw", self.workout2), True)
+        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(IsCoachAndVisibleToCoach_object, self.request1, "view", self.workout), False)
 
 
     # def test_IsCoachOfWorkoutAndVisibleToCoach(self):
