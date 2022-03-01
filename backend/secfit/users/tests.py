@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.forms import ValidationError
 from django.test import TestCase
 from users.serializers import (
     UserSerializer
@@ -9,7 +10,7 @@ class UserSerializerTest(TestCase):
     def test_valid_password(self):
         user_serializer_object = UserSerializer()
 
-        password = " "
+        password = "123"
         user_serializer_object.password = password
         user_serializer_object.password1 = password
 
@@ -19,7 +20,8 @@ class UserSerializerTest(TestCase):
         user_serializer_object.password = password
         user_serializer_object.password1 = password
 
-        self.assertEqual(UserSerializer.validate_password(user_serializer_object, password), password)
+        with self.assertRaises(ValidationError):
+            UserSerializer.validate_password(user_serializer_object, password)
 
 
     def test_create_user(self):
