@@ -27,7 +27,7 @@ from workouts.serializers import (
 
 class WorkoutPermissionsTest(TestCase):
             
-    def set_up(self):
+    def setUp(self):
         self.factory = RequestFactory()
         self.user1 = User.objects.create(username="Ola Nordmann", password="123")
         self.user2 = User.objects.create(username="Ola Sørmann", password="123", coach=self.user1)
@@ -56,10 +56,20 @@ class WorkoutPermissionsTest(TestCase):
 
         is_owner_of_workout_object = IsOwnerOfWorkout()
 
-        self.request1.POST["workout"] = self.workout
+        self.request1.data = {
+            "workout": '/workout/1/'
+        }
+        self.assertEqual(IsOwnerOfWorkout.has_permission(is_owner_of_workout_object, self.request1, "view"), True)
 
-        IsOwnerOfWorkout.has_permission(is_owner_of_workout_object, self.request1, "view")
+        self.request1.data = {
+            "workout": '/workout/2/'
+        }
+        self.assertEqual(IsOwnerOfWorkout.has_permission(is_owner_of_workout_object, self.request1, "view"), False)
 
+        self.request1.data = {}
+        self.assertEqual(IsOwnerOfWorkout.has_permission(is_owner_of_workout_object, self.request1, "view"), False)
+        self.assertEqual(IsOwnerOfWorkout.has_permission(is_owner_of_workout_object, self.request2, "view"), True)
+        
 
     def test_is_owner_of_workout_has_object_permission(self):
 
@@ -73,7 +83,7 @@ class WorkoutPermissionsTest(TestCase):
 
         is_coach_and_visible_to_coach_object = IsCoachAndVisibleToCoach()
 
-        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(is_coach_and_visible_to_coach_object, self.request1, "veiw", self.workout2), True)
+        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(is_coach_and_visible_to_coach_object, self.request1, "view", self.workout2), True)
         self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(is_coach_and_visible_to_coach_object, self.request1, "view", self.workout), False)
 
 

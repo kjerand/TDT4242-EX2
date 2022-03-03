@@ -19,8 +19,9 @@ class IsOwnerOfWorkout(permissions.BasePermission):
             if request.data.get("workout"):
                 workout_id = request.data["workout"].split("/")[-2]
                 workout = Workout.objects.get(pk=workout_id)
+
                 if workout:
-                    return workout.owner == request.user
+                    return workout.owner == request.user    
             return False
 
         return True
