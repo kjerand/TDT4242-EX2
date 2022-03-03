@@ -16,6 +16,13 @@ class UserSerializerTest(TestCase):
 
         self.assertEqual(UserSerializer.validate_password(user_serializer_object, password), password)
 
+        password = " "
+        user_serializer_object.password = password
+        user_serializer_object.password1 = password
+
+        with self.assertRaises(ValidationError):
+            UserSerializer.validate_password(user_serializer_object, password)
+
 
     def test_create_user(self):
         user_serializer_object = UserSerializer()
