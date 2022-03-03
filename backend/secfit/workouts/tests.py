@@ -27,7 +27,7 @@ from workouts.serializers import (
 
 class WorkoutPermissionsTest(TestCase):
             
-    def setUp(self):
+    def set_up(self):
         self.factory = RequestFactory()
         self.user1 = User.objects.create(username="Ola Nordmann", password="123")
         self.user2 = User.objects.create(username="Ola Sørmann", password="123", coach=self.user1)
@@ -37,7 +37,6 @@ class WorkoutPermissionsTest(TestCase):
         self.exercise = Exercise.objects.create(name="test", description="test")
         self.exerciseInstance1 = ExerciseInstance.objects.create(workout = self.workout, exercise=self.exercise, sets=1, number=1)
         self.exerciseInstance2 = ExerciseInstance.objects.create(workout = self.workout2, exercise=self.exercise, sets=1, number=1)
-
 
         self.request1 = self.factory.get("/workout")
         self.request1.user = self.user1
@@ -70,42 +69,42 @@ class WorkoutPermissionsTest(TestCase):
         self.assertEqual(IsOwnerOfWorkout.has_object_permission(is_owner_of_workout_object, self.request2, "view", self.exerciseInstance1 ), False)
     
     
-    def test_IsCoachAndVisibleToCoach(self): 
+    def test_is_coach_and_visible_to_coach(self): 
 
-        IsCoachAndVisibleToCoach_object = IsCoachAndVisibleToCoach()
+        is_coach_and_visible_to_coach_object = IsCoachAndVisibleToCoach()
 
-        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(IsCoachAndVisibleToCoach_object, self.request1, "veiw", self.workout2), True)
-        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(IsCoachAndVisibleToCoach_object, self.request1, "view", self.workout), False)
+        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(is_coach_and_visible_to_coach_object, self.request1, "veiw", self.workout2), True)
+        self.assertEqual(IsCoachAndVisibleToCoach.has_object_permission(is_coach_and_visible_to_coach_object, self.request1, "view", self.workout), False)
 
 
-    def test_IsCoachOfWorkoutAndVisibleToCoach(self):
+    def test_is_coach_of_workout_and_visible_to_coach(self):
 
-        IsCoachOfWorkoutAndVisibleToCoach_object = IsCoachOfWorkoutAndVisibleToCoach()
+        test_is_coach_of_workout_and_visible_to_coach_object = IsCoachOfWorkoutAndVisibleToCoach()
 
-        self.assertEqual(IsCoachOfWorkoutAndVisibleToCoach.has_object_permission(IsCoachOfWorkoutAndVisibleToCoach_object, self.request1, "view", self.exerciseInstance2), True)
-        self.assertEqual(IsCoachOfWorkoutAndVisibleToCoach.has_object_permission(IsCoachOfWorkoutAndVisibleToCoach_object, self.request1, "view", self.exerciseInstance1), False)
+        self.assertEqual(IsCoachOfWorkoutAndVisibleToCoach.has_object_permission(test_is_coach_of_workout_and_visible_to_coach_object, self.request1, "view", self.exerciseInstance2), True)
+        self.assertEqual(IsCoachOfWorkoutAndVisibleToCoach.has_object_permission(test_is_coach_of_workout_and_visible_to_coach_object, self.request1, "view", self.exerciseInstance1), False)
         
-    def test_IsPublic(self):
+    def test_is_public(self):
 
-        IsPublic_object = IsPublic()
+        is_public_object = IsPublic()
 
-        self.assertEqual(IsPublic.has_object_permission(IsPublic_object, self.request1, "view", self.workout), True)
-        self.assertEqual(IsPublic.has_object_permission(IsPublic_object, self.request1, "view", self.workout2), False)
-
-
-    def test_IsWorkoutPublic(self):
-
-        IsWorkoutPublic_object = IsWorkoutPublic()
-
-        self.assertEqual(IsWorkoutPublic.has_object_permission(IsWorkoutPublic_object, self.request1, "view", self.exerciseInstance1), True)
-        self.assertEqual(IsWorkoutPublic.has_object_permission(IsWorkoutPublic_object, self.request1, "view", self.exerciseInstance2), False)
+        self.assertEqual(IsPublic.has_object_permission(is_public_object, self.request1, "view", self.workout), True)
+        self.assertEqual(IsPublic.has_object_permission(is_public_object, self.request1, "view", self.workout2), False)
 
 
+    def test_is_workout_public(self):
+
+        is_workout_public_object = IsWorkoutPublic()
+
+        self.assertEqual(IsWorkoutPublic.has_object_permission(is_workout_public_object, self.request1, "view", self.exerciseInstance1), True)
+        self.assertEqual(IsWorkoutPublic.has_object_permission(is_workout_public_object, self.request1, "view", self.exerciseInstance2), False)
 
 
-    def test_IsReadOnly(self):
 
-        IsReadOnly_object = IsReadOnly()
 
-        self.assertEqual(IsReadOnly.has_object_permission(IsReadOnly_object, self.request1, "view", self.user1), False)
-        self.assertEqual(IsReadOnly.has_object_permission(IsReadOnly_object, self.request2, "view", self.user1), True)
+    def test_is_read_only(self):
+
+        is_read_only_object = IsReadOnly()
+
+        self.assertEqual(IsReadOnly.has_object_permission(is_read_only_object, self.request1, "view", self.user1), False)
+        self.assertEqual(IsReadOnly.has_object_permission(is_read_only_object, self.request2, "view", self.user1), True)
