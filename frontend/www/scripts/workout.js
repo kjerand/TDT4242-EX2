@@ -103,11 +103,6 @@ async function retrieveWorkout(id) {
             exerciseWeightInput.value = workoutData.exercise_instances[i].weight;
             exerciseWeightInput.readOnly = true;
 
-            let exerciseDurationInput = divExerciseContainer.querySelector("input[name='duration']");
-            exerciseDurationInput.id = `inputNumber${i}`;
-            exerciseDurationInput.value = workoutData.exercise_instances[i].duration;
-            exerciseDurationInput.readOnly = true;
-
             let exercisesDiv = document.querySelector("#div-exercises");
             exercisesDiv.appendChild(divExerciseContainer);
         }
@@ -187,14 +182,12 @@ function generateWorkoutForm() {
     let exerciseInstancesSets = formData.getAll("sets");
     let exerciseInstancesNumbers = formData.getAll("number");
     let exerciseInstancesWeight = formData.getAll("weight");
-    let exerciseInstancesDuration = formData.getAll("duration");
     for (let i = 0; i < exerciseInstancesTypes.length; i++) {
         exerciseInstances.push({
             exercise: `${HOST}/api/exercises/${exerciseInstancesTypes[i]}/`,
             number: exerciseInstancesNumbers[i],
             sets: exerciseInstancesSets[i],
-            weight: exerciseInstancesWeight[i],
-            duration: exerciseInstancesDuration[i]
+            weight: exerciseInstancesWeight[i]
         });
     }
 
