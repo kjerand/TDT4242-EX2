@@ -115,6 +115,8 @@ class ExerciseInstance(models.Model):
     )
     sets = models.IntegerField()
     number = models.IntegerField()
+    weight = models.IntegerField(default=0)
+    duration = models.IntegerField(default=0)
 
 
 def workout_directory_path(instance, filename):
