@@ -41,6 +41,12 @@ async function retrieveMeal(id) {
             a.className = "me-2";
             filesDiv.appendChild(a);
         }
+
+        let divIngredients = document.getElementById("meal-ingredients");
+        divIngredients.innerHTML = mealData.ingredients;
+
+        let caloriesText = document.getElementById("calories");
+        caloriesText.innerHTML = "Calories: " + mealData.calories + " kcal, carbs: " +mealData.carbohydrates+"g, fat: " +mealData.fat+"g, protein: " + mealData.protein+"g"
     }
     return mealData;     
 }
@@ -92,11 +98,40 @@ function generateMealForm() {
     let formData = new FormData(form);
     let submitForm = new FormData();
 
+    let weights = formData.getAll("weight");
+    let e = formData.getAll("type");
+    
+    let cal = 0;
+    let protein = 0;
+    let fat = 0;
+    let carbs = 0;
+    let ingredients = "";
+
+    for (let i = 0; i < e.length; i++) {
+        let macros = e[i].split(",")
+        ingredients += macros[4] + ", "
+
+        if (weights[i]) {
+            cal += (parseFloat(weights[i]) / 100) * parseInt(macros[0])
+            fat += (parseFloat(weights[i]) / 100) * parseInt(macros[1])
+            protein += (parseFloat(weights[i]) / 100) * parseInt(macros[2])
+            carbs += (parseFloat(weights[i]) / 100) * parseInt(macros[3])
+        } 
+    }
+
     submitForm.append("name", formData.get('name'));
     let date = new Date(formData.get('date')).toISOString();
     submitForm.append("date", date);
     submitForm.append("notes", formData.get("notes"));
-    submitForm.append("calories", formData.get("calories"));
+    submitForm.append("calories", cal);
+    submitForm.append("fat", fat);
+    submitForm.append("protein", protein);
+    submitForm.append("carbohydrates", carbs);
+    submitForm.append("ingredients", ingredients);
+
+    for(var pair of submitForm.entries()) {
+        console.log(pair[0]+ ', '+ pair[1]);
+     }
 
     // Adds the files
     for (let file of formData.getAll("files")) {
@@ -123,14 +158,79 @@ function handleCancelDuringMealCreate() {
     window.location.replace("meals.html");
 }
 
+
+async function createBlankIngredient() {
+    let form = document.querySelector("#form-meal");
+
+    let ingredientResponse = await sendRequest("GET", `${HOST}/api/ingredients/`);
+    let ingredientTypes = await ingredientResponse.json();
+
+    let ingredientTemplate = document.querySelector("#template-ingredient");
+    let divIngredientContainer = ingredientTemplate.content.firstElementChild.cloneNode(true);
+    let ingredientTypeSelect = divIngredientContainer.querySelector("select");
+    
+    for (let i = 0; i < ingredientTypes.count; i++) {
+        let option = document.createElement("option");
+        option.value = [ingredientTypes.results[i].calories, ingredientTypes.results[i].fat, ingredientTypes.results[i].protein, ingredientTypes.results[i].carbohydrates, ingredientTypes.results[i].name];
+        option.innerText = ingredientTypes.results[i].name;
+        ingredientTypeSelect.append(option);
+    }
+
+    let currentIngredientType = ingredientTypes.results[0];
+    ingredientTypeSelect.value = currentIngredientType.name;
+    
+    let divIngredients = document.querySelector("#ingredients");
+    divIngredients.appendChild(divIngredientContainer);
+}
+
+function removeIngredient(event) {
+    let divExerciseContainers = document.querySelectorAll(".div-ingredient-container");
+    if (divExerciseContainers && divExerciseContainers.length > 0) {
+        divExerciseContainers[divExerciseContainers.length - 1].remove();
+    }
+}
+
+var form = document.querySelector('#form-meal');
+form.addEventListener('change', function() {
+    let formData = new FormData(document.querySelector("#form-meal"));
+    let caloriesText = document.getElementById("calories");
+
+    let weights = formData.getAll("weight");
+    var e = formData.getAll("type");
+    
+    let cal = 0;
+    let protein = 0;
+    let fat = 0;
+    let carbs = 0;
+
+    for (let i = 0; i < e.length; i++) {
+        let macros = e[i].split(",")
+        if (weights[i]) {
+            cal += (parseFloat(weights[i]) / 100) * parseInt(macros[0])
+            fat += (parseFloat(weights[i]) / 100) * parseInt(macros[1])
+            protein += (parseFloat(weights[i]) / 100) * parseInt(macros[2])
+            carbs += (parseFloat(weights[i]) / 100) * parseInt(macros[3])
+        } 
+    }
+    
+    caloriesText.innerHTML = "Calories: " + cal + " kcal, carbs: " +carbs+"g, fat: " +fat+"g, protein: " + protein+"g"
+});
+
 window.addEventListener("DOMContentLoaded", async () => {
     cancelMealButton = document.querySelector("#btn-cancel-meal");
     okMealButton = document.querySelector("#btn-ok-meal");
     deleteMealButton = document.querySelector("#btn-delete-meal");
     editMealButton = document.querySelector("#btn-edit-meal");
 
+    let buttonAddIngredient = document.querySelector("#btn-add-ingredient");
+    let buttonRemoveIngredient = document.querySelector("#btn-remove-ingredient");
+
+    buttonAddIngredient.addEventListener("click", createBlankIngredient);
+    buttonRemoveIngredient.addEventListener("click", removeIngredient);
+
     const urlParams = new URLSearchParams(window.location.search);
     let currentUser = await getCurrentUser();
+
 
     if (urlParams.has('id')) {
         const id = urlParams.get('id');
@@ -148,6 +248,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         setReadOnly(false, "#form-meal");
         ownerInput.readOnly = !ownerInput.readOnly;
 
+        buttonAddIngredient.className = buttonAddIngredient.className.replace(" hide", "");
+        buttonRemoveIngredient.className = buttonRemoveIngredient.className.replace(" hide", "");
         okMealButton.className = okMealButton.className.replace(" hide", "");
         cancelMealButton.className = cancelMealButton.className.replace(" hide", "");
 

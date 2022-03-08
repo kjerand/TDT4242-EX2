@@ -1,8 +1,9 @@
 """Serializers for the meals application
 """
+
 from rest_framework import serializers
 from rest_framework.serializers import HyperlinkedRelatedField
-from meals.models import Meal, MealFile
+from meals.models import Meal, MealFile, Ingredient
 
 class MealFileSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for a MealFile. Hyperlinks are used for relationships by default.
@@ -51,6 +52,10 @@ class MealSerializer(serializers.HyperlinkedModelSerializer):
             "date",
             "notes",
             "calories",
+            "fat",
+            "protein",
+            "carbohydrates",
+            "ingredients",
             "is_veg",
             "owner",
             "owner_username",
@@ -137,3 +142,27 @@ class MealSerializer(serializers.HyperlinkedModelSerializer):
             str: Username of owner
         """
         return obj.owner.username
+
+
+
+
+class IngredientSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = [
+            "name",
+            "fat",
+            "protein",
+            "carbohydrates",
+            "calories",
+            "instances"
+        ]
+        extra_kwargs = {"owner": {"read_only": True}}
+       
+    instances = serializers.HyperlinkedRelatedField(
+        many=True, view_name="ingredient", read_only=True
+    )
+
+   
+
+    

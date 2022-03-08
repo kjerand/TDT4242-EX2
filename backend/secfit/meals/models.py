@@ -43,6 +43,11 @@ class Meal(models.Model):
     date = models.DateTimeField()
     notes = models.TextField()
     calories = models.IntegerField()
+    fat = models.IntegerField(default=0)
+    protein = models.IntegerField(default=0)
+    carbohydrates = models.IntegerField(default=0)
+    ingredients = models.CharField(max_length=100, default='')
+    
     is_veg = models.BooleanField(default=False)
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="meals"
@@ -53,6 +58,42 @@ class Meal(models.Model):
 
     def __str__(self):
         return self.name
+
+class Ingredient(models.Model):
+    """Django model for a meal that users can log.
+
+    A meal has several attributes, and files uploaded by the user.
+
+    Attributes:
+        name:        Name of the ingredient
+        carbs:       Carbs in the ingredient
+        fat:         Fat in the ingredient
+        protein:     Protein in the ingredient
+        calories:    Total amount of calories in the ingredient
+        owner:       User that logged the meal
+    """
+
+    name = models.CharField(max_length=100)
+    carbohydrates = models.IntegerField()
+    fat = models.IntegerField()
+    protein = models.IntegerField()
+    calories = models.IntegerField()
+
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+class IngredientInstance(models.Model):
+    meal = models.ForeignKey(
+        Meal, on_delete=models.CASCADE, related_name="meal_instances"
+    )
+    ingredient = models.ForeignKey(
+        Ingredient, on_delete=models.CASCADE, related_name="instances"
+    )
+    weight = models.IntegerField()
 
 def meal_directory_path(instance, filename):
     """Return path for which meal files should be uploaded on the web server

@@ -11,6 +11,7 @@ urlpatterns = format_suffix_patterns(
     [
         path("", views.api_root),
         path("api/meals/", views.MealList.as_view(), name="meal-list"),
+        path("api/ingredients/", views.IngredientList.as_view(), name="ingredient-list"),
         path(
             "api/meals/<int:pk>/",
             views.MealDetail.as_view(),

@@ -41,11 +41,44 @@
             <textarea class="form-control" id="inputNotes" name="notes" readonly></textarea>
           </div>
           <div class="col-lg-6"></div>
+          <div id="ingredients">
+            <div class="col-lg-12">
+              <h3 class="mt-3">Ingredients</h3>
+            </div>
+            <template id="template-ingredient">
+              <div class="row div-ingredient-container g-3 mb-3 mt-3">
+                <div class="col-lg-6"><h5>Ingredient</h5></div>
+                <div class="col-lg-6"></div>
+                <div class="col-lg-6">
+                  <label class="form-label ingredient-type">Type</label>
+                  <select class="form-select" name="type">
+                  </select>
+                </div>
+                <div class="col-lg-6"></div>
+                <div class="col-lg-3">
+                  <label class="form-label ingredient-number">Weight in grams</label>
+                  <input type="number" class="form-control" name="weight">
+                </div>
+                <div class="col-lg-6"></div>
+              </div>
+            </template> 
+          </div>
+          <div class="col-lg-6"> 
+            <div id="meal-ingredients"></div>
+          </div>
+         
+          <div class="col-lg-6"></div>
           <div class="col-lg-6">
-            <label for="inputCalories" class="form-label">Calories</label>
-            <input type="number" class="form-control" id="inputCalories" name="calories" readonly></input>
+            <input type="button" class="btn btn-primary hide" id="btn-add-ingredient" value="Add ingredient">
+            <input type="button" class="btn btn-danger hide" id="btn-remove-ingredient" value="Remove ingreident">
           </div>
           <div class="col-lg-6"></div>
+
+          <div class="col-lg-6">
+            <h4 id="calories" class="form-label">Calories: 0 kcal</h4>
+          </div>
+          <div class="col-lg-6"></div>
+  
           <div class="col-lg-6">
             <div class="input-group">
                 <input type="file" class="form-control" id="customFile" name="files" multiple disabled>

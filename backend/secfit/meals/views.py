@@ -18,9 +18,10 @@ from meals.permissions import (
     IsReadOnly,
 )
 from meals.mixins import CreateListModelMixin
-from meals.models import Meal, MealFile
+from meals.models import Meal, MealFile, Ingredient
 from meals.serializers import MealSerializer
 from meals.serializers import MealFileSerializer
+from meals.serializers import IngredientSerializer
 from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -77,6 +78,26 @@ class MealList(
             qs = Meal.objects.filter(Q(owner=self.request.user)).distinct()
         return qs
 
+class IngredientList(
+    mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
+):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]  # User must be authenticated to create/view meals
+   
+    ordering_fields = ["name"]
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+
+  
 class MealDetail(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
