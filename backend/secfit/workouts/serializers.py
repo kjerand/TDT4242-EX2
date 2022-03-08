@@ -20,7 +20,7 @@ class ExerciseInstanceSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ExerciseInstance
-        fields = ["url", "id", "exercise", "sets", "number", "weight", "workout"]
+        fields = ["url", "id", "exercise", "sets", "number", "info", "workout"]
 
 
 class WorkoutFileSerializer(serializers.HyperlinkedModelSerializer):
@@ -148,8 +148,8 @@ class WorkoutSerializer(serializers.HyperlinkedModelSerializer):
             exercise_instance.sets = exercise_instance_data.get(
                 "sets", exercise_instance.sets
             )
-            exercise_instance.weight = exercise_instance_data.get(
-                "weight", exercise_instance.weight
+            exercise_instance.info = exercise_instance_data.get(
+                "info", exercise_instance.info
             )
             
             exercise_instance.save()
@@ -217,7 +217,7 @@ class ExerciseSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = ["url", "id", "name", "description", "duration", "calories", "muscleGroup", "unit", "instances"]
+        fields = ["url", "id", "name", "description", "duration", "calories", "muscleGroup", "unit", "info", "instances"]
 
 
 class RememberMeSerializer(serializers.HyperlinkedModelSerializer):

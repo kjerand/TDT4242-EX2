@@ -98,10 +98,14 @@ async function retrieveWorkout(id) {
             exerciseNumberInput.value = workoutData.exercise_instances[i].number;
             exerciseNumberInput.readOnly = true;
 
-            let exerciseWeightInput = divExerciseContainer.querySelector("input[name='weight']");
-            exerciseWeightInput.id = `inputNumber${i}`;
-            exerciseWeightInput.value = workoutData.exercise_instances[i].weight;
-            exerciseWeightInput.readOnly = true;
+            let exerciseInfoLabel = divExerciseContainer.querySelector('.exercise-info');
+            exerciseInfoLabel.for = "for", `inputNumber${i}`;
+            exerciseInfoLabel.innerText = currentExerciseType.info;
+
+            let exerciseInfoInput = divExerciseContainer.querySelector("input[name='info']");
+            exerciseInfoInput.id = `inputNumber${i}`;
+            exerciseInfoInput.value = workoutData.exercise_instances[i].info;
+            exerciseInfoInput.readOnly = true;
 
             let exercisesDiv = document.querySelector("#div-exercises");
             exercisesDiv.appendChild(divExerciseContainer);
@@ -181,13 +185,13 @@ function generateWorkoutForm() {
     let exerciseInstancesTypes = formData.getAll("type");
     let exerciseInstancesSets = formData.getAll("sets");
     let exerciseInstancesNumbers = formData.getAll("number");
-    let exerciseInstancesWeight = formData.getAll("weight");
+    let exerciseInstancesInfo = formData.getAll("info");
     for (let i = 0; i < exerciseInstancesTypes.length; i++) {
         exerciseInstances.push({
             exercise: `${HOST}/api/exercises/${exerciseInstancesTypes[i]}/`,
             number: exerciseInstancesNumbers[i],
             sets: exerciseInstancesSets[i],
-            weight: exerciseInstancesWeight[i]
+            info: exerciseInstancesInfo[i]
         });
     }
 
