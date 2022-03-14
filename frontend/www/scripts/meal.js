@@ -123,10 +123,10 @@ function generateMealForm() {
     let date = new Date(formData.get('date')).toISOString();
     submitForm.append("date", date);
     submitForm.append("notes", formData.get("notes"));
-    submitForm.append("calories", cal);
-    submitForm.append("fat", fat);
-    submitForm.append("protein", protein);
-    submitForm.append("carbohydrates", carbs);
+    submitForm.append("calories", Math.round(cal));
+    submitForm.append("fat", Math.round(fat));
+    submitForm.append("protein", Math.round(protein));
+    submitForm.append("carbohydrates", Math.round(carbs));
     submitForm.append("ingredients", ingredients);
 
     for(var pair of submitForm.entries()) {
