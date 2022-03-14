@@ -19,6 +19,7 @@ class NavBar extends HTMLElement {
                 <a class="nav-link hide" id="nav-mycoach" href="mycoach.html">Coach</a>
                 <a class="nav-link hide" id="nav-myathletes" href="myathletes.html">Athletes</a>
                 <a class="nav-link hide" id="nav-meals" href="meals.html">Meal registration</a>
+                <a class="nav-link" id="nav-friends" href="friends.html">Friends</a>
                 <a class="nav-link" id="nav-ingredients" href="ingredients.html">Ingredients</a>
                 <hr>
             </div>

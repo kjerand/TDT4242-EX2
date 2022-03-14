@@ -88,6 +88,7 @@ class Exercise(models.Model):
     calories = models.IntegerField(default=0)
     muscleGroup = models.TextField(default="Legs")
     unit = models.CharField(max_length=50)
+    info = models.CharField(max_length=50, default="")
 
     def __str__(self):
         return self.name
@@ -115,6 +116,7 @@ class ExerciseInstance(models.Model):
     )
     sets = models.IntegerField()
     number = models.IntegerField()
+    info = models.IntegerField(default=0)
 
 
 def workout_directory_path(instance, filename):

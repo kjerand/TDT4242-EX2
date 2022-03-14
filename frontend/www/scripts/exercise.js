@@ -48,6 +48,7 @@ function handleCancelButtonDuringEdit() {
     if (oldFormData.has("calories")) form.calories.value = oldFormData.get("calories");
     if (oldFormData.has("muscleGroup")) form.muscleGroup.value = oldFormData.get("muscleGroup");
     if (oldFormData.has("unit")) form.unit.value = oldFormData.get("unit");
+    if (oldFormData.has("info")) form.unit.value = oldFormData.get("info");
     
     oldFormData.delete("name");
     oldFormData.delete("description");
@@ -55,6 +56,7 @@ function handleCancelButtonDuringEdit() {
     oldFormData.delete("calories");
     oldFormData.delete("muscleGroup");
     oldFormData.delete("unit");
+    oldFormData.delete("info");
 
 }
 
@@ -71,7 +73,8 @@ async function createExercise() {
                 "duration": formData.get("duration"),
                 "calories": formData.get("calories"),
                 "muscleGroup": formData.get("muscleGroup"), 
-                "unit": formData.get("unit")};
+                "unit": formData.get("unit"),
+                "info": formData.get("info")};
 
     let response = await sendRequest("POST", `${HOST}/api/exercises/`, body);
 
@@ -151,7 +154,8 @@ async function updateExercise(id) {
                 "duration": formData.get("duration"),
                 "calories": formData.get("calories"),
                 "muscleGroup": selectedMuscleGroup.getMuscleGroupType(),
-                "unit": formData.get("unit")};
+                "unit": formData.get("unit"),
+                "info": formData.get("info")};
     let response = await sendRequest("PUT", `${HOST}/api/exercises/${id}/`, body);
 
     if (!response.ok) {
@@ -176,6 +180,7 @@ async function updateExercise(id) {
         oldFormData.delete("calories");
         oldFormData.delete("muscleGroup");
         oldFormData.delete("unit");
+        oldFormData.delete("info");
     }
 }
 
