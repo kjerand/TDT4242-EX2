@@ -26,7 +26,7 @@ var cordovaServe = require('cordova-serve');
 
 module.exports.run = function (args) {
     // defaults
-    args.port = args.port || 8000;
+    args.port = args.port || 8001;
     args.target = args.target || 'default'; // make default the system browser
     args.noLogOutput = args.silent || false;
 
