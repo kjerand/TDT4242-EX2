@@ -41,7 +41,6 @@ describe('Boundary test for view/edit exercise page ', () => {
 
     cy.get('[name=name]')
     .type(exercise)
-
     cy.get('[name=unit]')
     .type(unit)
     cy.get('[name=info]')
@@ -66,7 +65,6 @@ describe('Boundary test for view/edit exercise page ', () => {
 
     cy.get('[name=name]')
     .type(exercise)
-
     cy.get('[name=unit]')
     .type(unit)
     cy.get('[name=info]')
@@ -90,7 +88,6 @@ describe('Boundary test for view/edit exercise page ', () => {
 
     cy.get('[name=name]')
     .type(exercise)
-
     cy.get('[name=unit]')
     .type(unit)
     cy.get('[name=info]')
@@ -100,12 +97,11 @@ describe('Boundary test for view/edit exercise page ', () => {
     cy.get('[name=calories]')
     .type(calories)
    
-
     cy.get('[id=btn-ok-exercise]').click().wait(1000)
     cy.get(".alert").should("be.visible")
   })
 
-  it('Test unit input length boundary', () => {
+  it('Test unit input length upper boundary', () => {
     logInAndFillInputs()
 
     const exercise = makeStringWithGivenLength(20)
@@ -127,7 +123,7 @@ describe('Boundary test for view/edit exercise page ', () => {
     cy.get(".alert").should("be.visible")
   })
 
-  it('Test unit input length lower', () => {
+  it('Test unit input boundary', () => {
     logInAndFillInputs()
 
     const exercise = makeStringWithGivenLength(20)
