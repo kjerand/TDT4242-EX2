@@ -26,7 +26,7 @@ describe("Create ingredient", () => {
   
       cy.visit("http://localhost:8001/ingredient.html");
 
-      const ingredientName = "Burger";
+      const ingredientName = makeStringWithGivenLength(5);
   
       cy.get("[name=name]").type(ingredientName);
       
@@ -40,7 +40,8 @@ describe("Create ingredient", () => {
   
       cy.get("[id=btn-create-meal]").click().wait(1000);
 
-      const mealName = "Breakfast";
+      const mealName = makeStringWithGivenLength(5);
+      const mealWeight = 100
         
       cy.get("[name=name]").type(mealName);
   
@@ -50,6 +51,7 @@ describe("Create ingredient", () => {
         
       cy.get("[id=btn-add-ingredient]").click().wait(1000);
       cy.get("[name=type]").select(ingredientName);
+      cy.get("[name=weight]").type(mealWeight)
        
       cy.get("[id=btn-ok-meal]").click().wait(1000);
   
