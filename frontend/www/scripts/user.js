@@ -15,11 +15,22 @@ async function retrieveUser(id) {
         title = document.getElementById("profilename")
         title.textContent = user.username
 
+        email = document.getElementById("email")
+        email.textContent = "Email: " + user.email
+
+        phone_number = document.getElementById("phone_number")
+        phone_number.textContent = "Phone number: " + user.phone_number
+
         country = document.getElementById("country")
         country.textContent = "Country: " + user.country
 
         city = document.getElementById("city")
         city.textContent = "City: " + user.city
+
+        street_address = document.getElementById("street_address")
+        street_address.textContent = "Street adress: " + user.street_address
+
+
 
         
         let container = document.getElementById('div-content');
