@@ -13,11 +13,32 @@
 <body>
     <navbar-el></navbar-el>
 
+    
     <div class="container">
         <div class="row">
             <div class="col-lg text-center">
                 <h3 class="mt-5">View Friends</h3>
                 <p>Here you can view friends</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <input type="text" class="form-control" id="searchFriends" name="searchFriends">
+            </div>
+
+            <div class="col-lg-6">
+                <input type="button" class="btn btn-primary" id="btn-search-friends" value="  Search  ">
+            </div>
+
+            <label for="">Friends</label>
+            <div class="col-lg text-center">
+                <div class="list-group mt-1" id="div-content-friends"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg text-center">
+                <h3 class="mt-5">View All Users</h3>
+                <p>Here you can view all users</p>
         </div>
         <div class="row">
             <div class="col-lg-6">
@@ -34,6 +55,8 @@
             </div>
         </div>
     </div>
+
+
 
     <template id="template-users">
         <a class="list-group-item list-group-item-action flex-column align-items-start my-1 exercise" href="">

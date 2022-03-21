@@ -26,6 +26,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "workouts",
             "coach_files",
             "athlete_files",
+            "friends"
         ]
 
     def validate_password(self, value):
@@ -73,6 +74,7 @@ class UserGetSerializer(serializers.HyperlinkedModelSerializer): # pragma: no co
             "workouts",
             "coach_files",
             "athlete_files",
+            "friends"
         ]
 
 

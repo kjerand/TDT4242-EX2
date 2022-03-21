@@ -18,6 +18,8 @@ class User(AbstractUser):
     country = models.TextField(max_length=50, blank=True)
     city = models.TextField(max_length=50, blank=True)
     street_address = models.TextField(max_length=50, blank=True)
+    friends = models.TextField(max_length=1000, blank=True)
+
     
 
 def athlete_directory_path(instance, filename):

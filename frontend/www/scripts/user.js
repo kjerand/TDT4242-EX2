@@ -65,6 +65,48 @@ async function retrieveUser(id) {
     }
 }
 
+async function addFriend(id) {
+    console.log("HALLO")
+
+
+
+    let response = await sendRequest("GET", `${HOST}/api/users/${id}/`);
+    if (!response.ok) {
+        let data = await response.json();
+        let alert = createAlert("Could not retrieve exercise data!", data);
+        document.body.prepend(alert);
+    } else {
+        let data = await response.json();
+
+        let currentUser = await getCurrentUser();
+
+        let friends;
+        if (currentUser.friends) friends = JSON.parse(currentUser.friends)
+        else friends = []
+        let exists = false;
+
+        friends.forEach((friend) => {
+            console.log(friend)
+            if (friend === data.username || currentUser.username === data.username) exists = true
+        })
+        if (!exists) friends.push(data.username)
+            
+        currentUser["friends"] = JSON.stringify(friends);
+
+        console.log(currentUser)
+    
+        let res = await sendRequest("PATCH", `${HOST}/api/users/${currentUser.username}/`, currentUser);
+    
+        if (!res.ok) {
+            data = await res.json();
+            alert = createAlert("Could not add friend!", data);
+            document.body.prepend(alert);
+        }
+    }
+
+    
+}
+
 
 async function getWorkout(id) {
     let workoutData = null;
@@ -86,6 +128,10 @@ function createWorkout() {
 window.addEventListener("DOMContentLoaded", async () => {
 
     const urlParams = new URLSearchParams(window.location.search);
+
+    let addFriendButton = document.querySelector("#btn-add-friend");
+
+    addFriendButton.addEventListener("click", async () => addFriend(urlParams.get('id')));
 
     // view/edit
     if (urlParams.has('id')) {
