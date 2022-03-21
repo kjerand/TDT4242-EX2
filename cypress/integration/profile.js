@@ -1,8 +1,10 @@
 describe("Check profile", () => {
   const username = "testusername";
-    const password = 'testpassword  '
+  const password = 'testpassword'
+  const searchString = 'test'
 
-  it("Tests weight input", () => {
+
+  before(() => {
     cy.visit("http://localhost:8001/index.html");
 
     cy.contains("Log in").click();
@@ -12,8 +14,12 @@ describe("Check profile", () => {
     cy.get("[name=password]").type(password);
 
     cy.get("[id=btn-login]").click().wait(1000);
+  });
 
+  it("Search for user and check profile", () => {
     cy.visit("http://localhost:8001/friends.html").wait(1000);
+
+    cy.get('[id=search]').type(searchString)
 
     cy.contains(username).click().wait(1000);
 

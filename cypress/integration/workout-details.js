@@ -9,11 +9,18 @@ const makeStringWithGivenLength = (length) => {
   return result;
 };
 
-describe("Check profile", () => {
+describe("Check workout info and visibility", () => {
   const username = "testusername";
   const password = "testpassword";
   const fixtureFile = "./testWorkoutFile";
-  const fixtureFileName = 'testWorkoutFile'
+  const fixtureFileName = "testWorkoutFile";
+
+  const exercise = makeStringWithGivenLength(5)
+  const description = 'desc'
+  const unit = 'Reps'
+  const info = 'Weigth'
+  const durationValue = 1
+  const calories = 1
 
   const workoutName = makeStringWithGivenLength(5);
   const workoutDate = "2022-03-15T10:00";
@@ -33,6 +40,17 @@ describe("Check profile", () => {
     cy.get("[name=password]").type(password);
 
     cy.get("[id=btn-login]").click().wait(1000);
+
+    cy.visit("http://localhost:8001/exercise.html");
+
+    cy.get("[name=name]").type(exercise);
+    cy.get('[name=description]').type(description)
+    cy.get("[name=unit]").type(unit);
+    cy.get("[name=info]").type(info);
+    cy.get("[name=duration]").type(durationValue);
+    cy.get("[name=calories]").type(calories);
+
+    cy.get("[id=btn-ok-exercise]").click().wait(1000);
 
     cy.visit("http://localhost:8001/workout.html").wait(1000);
 

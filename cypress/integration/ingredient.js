@@ -11,9 +11,8 @@ describe("Create ingredient", () => {
   
     const username = "testusername";
     const password = "testpassword";
-  
-  
-    it("Tests ingredient creation", () => {
+
+    before(() => {
       cy.visit("http://localhost:8001/index.html");
   
       cy.contains("Log in").click();
@@ -23,7 +22,10 @@ describe("Create ingredient", () => {
       cy.get("[name=password]").type(password);
   
       cy.get("[id=btn-login]").click().wait(1000);
+    });
   
+  
+    it("Tests ingredient creation", () => {
       cy.visit("http://localhost:8001/ingredient.html");
 
       const ingredientName = makeStringWithGivenLength(5);
