@@ -67,25 +67,25 @@ async function retrieveWorkoutImages(id) {
             }
         }
 
-        const otherImageFileElements = document.querySelectorAll(".imgs img"); //25
-        const selectedOpacity = 0.6; //26
-        otherImageFileElements[0].style.opacity = selectedOpacity; //27
+        const otherImageFileElements = document.querySelectorAll(".imgs img"); //41
+        const selectedOpacity = 0.6; //42
+        otherImageFileElements[0].style.opacity = selectedOpacity; //43
 
-        otherImageFileElements.forEach((imageFileElement) => imageFileElement.addEventListener("click", (event) => {
+        otherImageFileElements.forEach((imageFileElement) => imageFileElement.addEventListener("click", (event) => { //44
             //Changes the main image
-            currentImageFileElement.src = event.target.src; //28
+            currentImageFileElement.src = event.target.src; //45
 
             //Adds the fade animation
-            currentImageFileElement.classList.add('fade-in')
-            setTimeout(() => currentImageFileElement.classList.remove('fade-in'), 500);
+            currentImageFileElement.classList.add('fade-in') //46
+            setTimeout(() => currentImageFileElement.classList.remove('fade-in'), 500); //47
 
             //Sets the opacity of the selected image to 0.4
-            otherImageFileElements.forEach((imageFileElement) => imageFileElement.style.opacity = 1)
-            event.target.style.opacity = selectedOpacity; //29
+            otherImageFileElements.forEach((imageFileElement) => imageFileElement.style.opacity = 1) //48
+            event.target.style.opacity = selectedOpacity; //49
         }))
 
     }
-    return workoutData; //30    
+    return workoutData; //50    
 }
 
 async function validateImgFileType(id, host_variable, acceptedFileTypes) {

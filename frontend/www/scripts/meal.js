@@ -158,8 +158,12 @@ function generateMealFormCopy() {
     let ingredients = document.getElementById('meal-ingredients').innerHTML;
 
     submitForm.append("name", formData.get('name') + '-copy');
-    let date = new Date(formData.get('date')).toISOString();
-    submitForm.append("date", date);
+    var today = new Date();
+
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    
+    var time ="T"+ today.getHours() + ":" + today.getMinutes() 
+    submitForm.append("date", date + time);
     submitForm.append("notes", formData.get("notes"));
     submitForm.append("calories", Math.round(cal));
     submitForm.append("fat", Math.round(fat));
