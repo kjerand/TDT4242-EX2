@@ -2,22 +2,22 @@ let goBackButton;
 let submitNewFileButton;
 
 async function retrieveWorkoutImages(id) {  
-    let workoutData = null;
-    let response = await sendRequest("GET", `${HOST}/api/workouts/${id}/`);
-    if (!response.ok) {
-        let data = await response.json();
-        let alert = createAlert("Could not retrieve workout data!", data);
-        document.body.prepend(alert);
+    let workoutData = null; //1
+    let response = await sendRequest("GET", `${HOST}/api/workouts/${id}/`); //2
+    if (!response.ok) { //3
+        let data = await response.json(); //4
+        let alert = createAlert("Could not retrieve workout data!", data); //5
+        document.body.prepend(alert); //6
     } else {
-        workoutData = await response.json();
+        workoutData = await response.json(); //7
 
-        document.getElementById("workout-title").innerHTML = "Workout name: " + workoutData["name"];
-        document.getElementById("workout-owner").innerHTML = "Owner: " + workoutData["owner_username"];
+        document.getElementById("workout-title").innerHTML = "Workout name: " + workoutData["name"]; //8
+        document.getElementById("workout-owner").innerHTML = "Owner: " + workoutData["owner_username"]; //9
 
-        let hasNoImages = workoutData.files.length == 0;
-        let noImageText = document.querySelector("#no-images-text");
+        let hasNoImages = workoutData.files.length == 0; // 10
+        let noImageText = document.querySelector("#no-images-text"); // 11
 
-        if(hasNoImages){
+        if(hasNoImages){ // 12
             noImageText.classList.remove("hide");
             return;
         }
@@ -25,55 +25,55 @@ async function retrieveWorkoutImages(id) {
         noImageText.classList.add("hide");
 
         
-        let filesDiv = document.getElementById("img-collection");
-        let filesDeleteDiv = document.getElementById("img-collection-delete");
+        let filesDiv = document.getElementById("img-collection"); // 13
+        let filesDeleteDiv = document.getElementById("img-collection-delete"); // 14
         
-        const currentImageFileElement = document.querySelector("#current");
-        let isFirstImg = true;
+        const currentImageFileElement = document.querySelector("#current"); //15
+        let isFirstImg = true; //16
 
-        let fileCounter = 0;
+        let fileCounter = 0; //17
 
-        for (let file of workoutData.files) {
-            let a = document.createElement("a");
-            a.href = file.file;
-            let pathArray = file.file.split("/");
-            a.text = pathArray[pathArray.length - 1];
-            a.className = "me-2";
+        for (let file of workoutData.files) {//18
+            let a = document.createElement("a"); //19
+            a.href = file.file; // 20
+            let pathArray = file.file.split("/"); //21
+            a.text = pathArray[pathArray.length - 1]; //22
+            a.className = "me-2"; //23
 
             
 
-            let isImage = ["jpg", "png", "gif", "jpeg", "JPG", "PNG", "GIF", "JPEG"].includes(a.text.split(".")[1]);
+            let isImage = ["jpg", "png", "gif", "jpeg", "JPG", "PNG", "GIF", "JPEG"].includes(a.text.split(".")[1]); //24
 
-            if(isImage){
-                let deleteImgButton = document.createElement("input");
-                deleteImgButton.type = "button";
-                deleteImgButton.className = "btn btn-close";
-                deleteImgButton.id = file.url.split("/")[file.url.split("/").length - 2];
-                deleteImgButton.addEventListener('click', () => handleDeleteImgClick(deleteImgButton.id, "DELETE", `Could not delete workout ${deleteImgButton.id}!`, HOST, ["jpg", "png", "gif", "jpeg", "JPG", "PNG", "GIF", "JPEG"]));
-                filesDeleteDiv.appendChild(deleteImgButton);
+            if(isImage){ //25
+                let deleteImgButton = document.createElement("input"); //26
+                deleteImgButton.type = "button"; //27
+                deleteImgButton.className = "btn btn-close"; //28
+                deleteImgButton.id = file.url.split("/")[file.url.split("/").length - 2]; //29
+                deleteImgButton.addEventListener('click', () => handleDeleteImgClick(deleteImgButton.id, "DELETE", `Could not delete workout ${deleteImgButton.id}!`, HOST, ["jpg", "png", "gif", "jpeg", "JPG", "PNG", "GIF", "JPEG"])); //30
+                filesDeleteDiv.appendChild(deleteImgButton); //31
                 
-                let img = document.createElement("img");
-                img.src = file.file;
+                let img = document.createElement("img"); //32
+                img.src = file.file; //33
                 
-                filesDiv.appendChild(img);
-                deleteImgButton.style.left = `${(fileCounter % 4) * 191}px`;
-                deleteImgButton.style.top = `${Math.floor(fileCounter / 4) * 105}px`;
+                filesDiv.appendChild(img); //34
+                deleteImgButton.style.left = `${(fileCounter % 4) * 191}px`; //35
+                deleteImgButton.style.top = `${Math.floor(fileCounter / 4) * 105}px`; //36
 
-                if(isFirstImg){
-                    currentImageFileElement.src = file.file;
-                    isFirstImg = false;
+                if(isFirstImg){ //37
+                    currentImageFileElement.src = file.file; //38
+                    isFirstImg = false; //39
                 }
-                fileCounter++;
+                fileCounter++; //40
             }
         }
 
-        const otherImageFileElements = document.querySelectorAll(".imgs img");
-        const selectedOpacity = 0.6;
-        otherImageFileElements[0].style.opacity = selectedOpacity;
+        const otherImageFileElements = document.querySelectorAll(".imgs img"); //25
+        const selectedOpacity = 0.6; //26
+        otherImageFileElements[0].style.opacity = selectedOpacity; //27
 
         otherImageFileElements.forEach((imageFileElement) => imageFileElement.addEventListener("click", (event) => {
             //Changes the main image
-            currentImageFileElement.src = event.target.src;
+            currentImageFileElement.src = event.target.src; //28
 
             //Adds the fade animation
             currentImageFileElement.classList.add('fade-in')
@@ -81,11 +81,11 @@ async function retrieveWorkoutImages(id) {
 
             //Sets the opacity of the selected image to 0.4
             otherImageFileElements.forEach((imageFileElement) => imageFileElement.style.opacity = 1)
-            event.target.style.opacity = selectedOpacity;
+            event.target.style.opacity = selectedOpacity; //29
         }))
 
     }
-    return workoutData;     
+    return workoutData; //30    
 }
 
 async function validateImgFileType(id, host_variable, acceptedFileTypes) {
