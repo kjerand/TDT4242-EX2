@@ -56,7 +56,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user_obj
 
 
-class UserGetSerializer(serializers.HyperlinkedModelSerializer):
+class UserGetSerializer(serializers.HyperlinkedModelSerializer): # pragma: no cover
     class Meta:
         model = get_user_model()
         fields = [
@@ -76,7 +76,7 @@ class UserGetSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class UserPutSerializer(serializers.ModelSerializer):
+class UserPutSerializer(serializers.ModelSerializer): # pragma: no cover
     class Meta:
         model = get_user_model()
         fields = ["athletes"]
@@ -88,7 +88,7 @@ class UserPutSerializer(serializers.ModelSerializer):
         return instance
 
 
-class AthleteFileSerializer(serializers.HyperlinkedModelSerializer):
+class AthleteFileSerializer(serializers.HyperlinkedModelSerializer): # pragma: no cover
     owner = serializers.ReadOnlyField(source="owner.username")
 
     class Meta:
@@ -99,7 +99,7 @@ class AthleteFileSerializer(serializers.HyperlinkedModelSerializer):
         return AthleteFile.objects.create(**validated_data)
 
 
-class OfferSerializer(serializers.HyperlinkedModelSerializer):
+class OfferSerializer(serializers.HyperlinkedModelSerializer): # pragma: no cover
     owner = serializers.ReadOnlyField(source="owner.username")
 
     class Meta:

@@ -140,6 +140,44 @@ function generateMealForm() {
     return submitForm;
 }
 
+function generateMealFormCopy() {
+    let form = document.querySelector("#form-meal");
+
+    let formData = new FormData(form);
+    let submitForm = new FormData();
+
+    let info = document.getElementById('calories').innerText
+    info = info.replaceAll('g', '')
+    info = info.replaceAll(',', '')
+    info = info.split(' ')
+    
+    let cal = parseInt(info[1]);
+    let protein = parseInt(info[8]);
+    let fat = parseInt(info[6]);
+    let carbs = parseInt(info[4]);
+    let ingredients = document.getElementById('meal-ingredients').innerHTML;
+
+    submitForm.append("name", formData.get('name') + '-copy');
+    let date = new Date(formData.get('date')).toISOString();
+    submitForm.append("date", date);
+    submitForm.append("notes", formData.get("notes"));
+    submitForm.append("calories", Math.round(cal));
+    submitForm.append("fat", Math.round(fat));
+    submitForm.append("protein", Math.round(protein));
+    submitForm.append("carbohydrates", Math.round(carbs));
+    submitForm.append("ingredients", ingredients);
+
+    for(var pair of submitForm.entries()) {
+        console.log(pair[0]+ ', '+ pair[1]);
+     }
+
+    // Adds the files
+    for (let file of formData.getAll("files")) {
+        submitForm.append("files", file);
+    }
+    return submitForm;
+}
+
 async function createMeal() {
     let submitForm = generateMealForm();
 
@@ -153,6 +191,21 @@ async function createMeal() {
         document.body.prepend(alert);
     }
 }
+
+async function copyMeal() {
+    let submitForm = generateMealFormCopy();
+
+    let response = await sendRequest("POST", `${HOST}/api/meals/`, submitForm, "");
+
+    if (response.ok) {
+        window.location.replace("meals.html");
+    } else {
+        let data = await response.json();
+        let alert = createAlert("Could not create new meal", data);
+        document.body.prepend(alert);
+    }
+}
+
 
 function handleCancelDuringMealCreate() {
     window.location.replace("meals.html");
@@ -221,6 +274,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     okMealButton = document.querySelector("#btn-ok-meal");
     deleteMealButton = document.querySelector("#btn-delete-meal");
     editMealButton = document.querySelector("#btn-edit-meal");
+    copyMealButton = document.querySelector("#btn-copy-meal")
 
     let buttonAddIngredient = document.querySelector("#btn-add-ingredient");
     let buttonRemoveIngredient = document.querySelector("#btn-remove-ingredient");
@@ -239,6 +293,8 @@ window.addEventListener("DOMContentLoaded", async () => {
         if (mealData["owner"] == currentUser.url) {
             editMealButton.classList.remove("hide");
             editMealButton.addEventListener("click", handleEditMealButtonClick);
+            copyMealButton.classList.remove("hide")
+            copyMealButton.addEventListener("click", async () => await copyMeal());
             deleteMealButton.addEventListener("click", (async (id) => await deleteMeal(id)).bind(undefined, id));
             okMealButton.addEventListener("click", (async (id) => await updateMeal(id)).bind(undefined, id));
         }
