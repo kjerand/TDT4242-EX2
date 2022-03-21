@@ -26,17 +26,19 @@ describe("Create workout", () => {
   const workoutNumber = 6;
   const workoutInfo = 50;
 
-  it("Tests weight input", () => {
+  before(() => {
     cy.visit("http://localhost:8001/index.html");
 
     cy.contains("Log in").click();
 
-    cy.get("[name=username]").type(username);
+    cy.get("[name=username]").type(username+15);
 
     cy.get("[name=password]").type(password);
 
     cy.get("[id=btn-login]").click().wait(1000);
+  });
 
+  it("Tests weight input", () => {
     cy.visit("http://localhost:8001/exercise.html");
 
     cy.get("[name=name]").type(exerciseName);
