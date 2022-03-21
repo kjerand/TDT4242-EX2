@@ -31,7 +31,7 @@ describe("Create workout", () => {
 
     cy.contains("Log in").click();
 
-    cy.get("[name=username]").type(username+15);
+    cy.get("[name=username]").type(username);
 
     cy.get("[name=password]").type(password);
 

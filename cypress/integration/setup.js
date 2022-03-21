@@ -3,7 +3,7 @@ describe('Set up test users', () => {
     const username = 'testusername'
     const password = 'testpassword'
     const username2 = 'testusername2'
-    const password2 = 'testpaassword2'
+    const password2 = 'testpassword2'
 
     beforeEach(() => {
         cy.visit("http://localhost:8001/register.html").wait(1000);

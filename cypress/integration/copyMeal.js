@@ -1,4 +1,4 @@
-describe("Create ingredient", () => {
+describe("Copy meal", () => {
   const makeStringWithGivenLength = (length) => {
     var chars =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -24,17 +24,7 @@ describe("Create ingredient", () => {
     cy.get("[id=btn-login]").click().wait(1000);
   });
 
-  it("Tests ingredient creation", () => {
-    cy.visit("http://localhost:8001/index.html");
-
-    cy.contains("Log in").click();
-
-    cy.get("[name=username]").type(username);
-
-    cy.get("[name=password]").type(password);
-
-    cy.get("[id=btn-login]").click().wait(1000);
-
+  it("Create and copy the meal", () => {
     cy.visit("http://localhost:8001/ingredient.html");
 
     const ingredientName = makeStringWithGivenLength(5);
