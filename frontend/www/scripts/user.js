@@ -66,10 +66,6 @@ async function retrieveUser(id) {
 }
 
 async function addFriend(id) {
-    console.log("HALLO")
-
-
-
     let response = await sendRequest("GET", `${HOST}/api/users/${id}/`);
     if (!response.ok) {
         let data = await response.json();
