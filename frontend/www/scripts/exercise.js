@@ -1,3 +1,5 @@
+import { getExercise } from "./routes";
+
 let cancelButton;
 let okButton;
 let deleteButton;
@@ -115,7 +117,7 @@ async function deleteExercise(id) {
 }
 
 async function retrieveExercise(id) {
-    let response = await sendRequest("GET", `${HOST}/api/exercises/${id}/`); // Rule 8
+    let response = await sendRequest("GET", getExerciseRoute(id)); // Rule 8
 
     console.log(response.ok) //log
 
