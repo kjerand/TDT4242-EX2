@@ -41,13 +41,11 @@ async function fetchUsers(request) {
 
 
 async function searchFriends() {
-  console.log("search");
-
   let currentUser = await getCurrentUser();
-
+  
   if (currentUser.friends !== "") {
     searchText = document.getElementById("searchFriends").value;
-
+    
     let users = JSON.parse(currentUser.friends) 
 
     console.log(users)

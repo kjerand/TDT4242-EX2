@@ -10,9 +10,9 @@ class MuscleGroup {
         this.validTypes = ["Legs", "Chest", "Back", "Arms", "Abdomen", "Shoulders"]
 
         this.type = this.validTypes.includes(type) ? type : undefined;
-    };
+    }
 
-    setMuscleGroupType = (newType) => {
+    setMuscleGroupType = (newType) => { //Rule 7: not consistent use of functions
         this.isValidType = false;
         
         if(this.validTypes.includes(newType)){
@@ -23,10 +23,10 @@ class MuscleGroup {
             alert("Invalid muscle group!");
         }
 
-    };
+    }
     
-    getMuscleGroupType = () => {
-        console.log(this.type, "SWIOEFIWEUFH")
+    getMuscleGroupType = () => { //Rule 7: not consistent use of functions
+        console.log(this.type, "SWIOEFIWEUFH") // remove this
         return this.type;
     }
 }
@@ -64,8 +64,8 @@ function handleCancelButtonDuringCreate() {
     window.location.replace("exercises.html");
 }
 
-async function createExercise() {
-    document.querySelector("select").removeAttribute("disabled")
+async function createExercise() { //Change to same name format with handle
+    document.querySelector("select").removeAttribute("disabled") //Rule 7: semicolon
     let form = document.querySelector("#form-exercise");
     let formData = new FormData(form);
     let body = {"name": formData.get("name"), 
@@ -76,7 +76,7 @@ async function createExercise() {
                 "unit": formData.get("unit"),
                 "info": formData.get("info")};
 
-    let response = await sendRequest("POST", `${HOST}/api/exercises/`, body);
+    let response = await sendRequest("POST", `${HOST}/api/exercises/`, body); //Rule 8 haed code
 
     if (response.ok) {
         window.location.replace("exercises.html");
@@ -104,7 +104,7 @@ function handleEditExerciseButtonClick() {
 }
 
 async function deleteExercise(id) {
-    let response = await sendRequest("DELETE", `${HOST}/api/exercises/${id}/`);
+    let response = await sendRequest("DELETE", `${HOST}/api/exercises/${id}/`); //Rule 8
     if (!response.ok) {
         let data = await response.json();
         let alert = createAlert(`Could not delete exercise ${id}`, data);
@@ -115,9 +115,9 @@ async function deleteExercise(id) {
 }
 
 async function retrieveExercise(id) {
-    let response = await sendRequest("GET", `${HOST}/api/exercises/${id}/`);
+    let response = await sendRequest("GET", `${HOST}/api/exercises/${id}/`); // Rule 8
 
-    console.log(response.ok)
+    console.log(response.ok) //log
 
     if (!response.ok) {
         let data = await response.json();
@@ -131,7 +131,7 @@ async function retrieveExercise(id) {
 
         for (let key of formData.keys()) {
             let selector
-            key !== "muscleGroup" ? selector = `input[name="${key}"], textarea[name="${key}"]` : selector = `select[name=${key}]`
+            key !== "muscleGroup" ? selector = `input[name="${key}"], textarea[name="${key}"]` : selector = `select[name=${key}]` //Rule 5: make it more simple
             let input = form.querySelector(selector);
             let newVal = exerciseData[key];
             input.value = newVal;
@@ -156,7 +156,7 @@ async function updateExercise(id) {
                 "muscleGroup": selectedMuscleGroup.getMuscleGroupType(),
                 "unit": formData.get("unit"),
                 "info": formData.get("info")};
-    let response = await sendRequest("PUT", `${HOST}/api/exercises/${id}/`, body);
+    let response = await sendRequest("PUT", `${HOST}/api/exercises/${id}/`, body); //Rule 8
 
     if (!response.ok) {
         let data = await response.json();
@@ -199,7 +199,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         await retrieveExercise(exerciseId);
 
         editButton.addEventListener("click", handleEditExerciseButtonClick);
-        deleteButton.addEventListener("click", (async (id) => await deleteExercise(id)).bind(undefined, exerciseId));
+        deleteButton.addEventListener("click", (async (id) => await deleteExercise(id)).bind(undefined, exerciseId)); //await not neccesary, sonar
         okButton.addEventListener("click", (async (id) => await updateExercise(id)).bind(undefined, exerciseId));
     } 
     //create
