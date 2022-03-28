@@ -1,6 +1,8 @@
+import { getWorkoutsRoute, getWorkoutsFileRoute } from "./routes";
+
 async function retrieveWorkoutImages(id) {
   let workoutData = null; //1
-  let response = await sendRequest("GET", `${HOST}/api/workouts/${id}/`); //2 //Rule 8: String should not be hard coded
+  let response = await sendRequest("GET", getWorkoutsRoute(id));
   if (!response.ok) {
     //3
     let data = await response.json(); //4
@@ -104,7 +106,7 @@ async function retrieveWorkoutImages(id) {
         ); //47
 
         //Sets the opacity of the selected image to 0.4
-        imageFileElement.style.opacity = 1
+        imageFileElement.style.opacity = 1;
         event.target.style.opacity = selectedOpacity; //49
       })
     );
@@ -133,13 +135,10 @@ async function handleDeleteImgClick(
   acceptedFileTypes
 ) {
   if (validateImgFileType(id, host_variable, acceptedFileTypes)) {
-    return;
+    return false;
   }
 
-  let response = await sendRequest(
-    http_keyword,
-    `${host_variable}/api/workout-files/${id}/`
-  );
+  let response = await sendRequest(http_keyword, getWorkoutsFileRoute(id) );
 
   if (!response.ok) {
     let data = await response.json();
@@ -148,6 +147,7 @@ async function handleDeleteImgClick(
   } else {
     location.reload();
   }
+  return true
 }
 
 function handleGoBackToWorkoutClick() {
