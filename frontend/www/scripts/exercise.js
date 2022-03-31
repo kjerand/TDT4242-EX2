@@ -1,4 +1,4 @@
-import { getAllExercisesRoute, getExercisesRoute } from "./routes";
+import routes from "./routes.js";
 
 let cancelButton;
 let okButton;
@@ -61,7 +61,9 @@ async function createExercise() { //Change to same name format with handle
     let formData = new FormData(form);
     let body = getFormBody(formData);
 
-    let response = await sendRequest("POST", getAllExercisesRoute(), body); //Rule 8 haed code
+    console.log(routes.getAllExercisesRoute())
+
+    let response = await sendRequest("POST", routes.getAllExercisesRoute(), body); //Rule 8 haed code
 
     if (response.ok) {
         window.location.replace("exercises.html");
@@ -89,7 +91,7 @@ function handleEditExerciseButtonClick() {
 }
 
 async function deleteExercise(id) {
-    let response = await sendRequest("DELETE", getExerciseRoute(id)); //Rule 8
+    let response = await sendRequest("DELETE", routes.getExerciseRoute(id)); //Rule 8
     if (!response.ok) {
         let data = await response.json();
         let alert = createAlert(`Could not delete exercise ${id}`, data);
@@ -100,7 +102,7 @@ async function deleteExercise(id) {
 }
 
 async function retrieveExercise(id) {
-    let response = await sendRequest("GET", getExerciseRoute(id)); // Rule 8
+    let response = await sendRequest("GET", routes.getExerciseRoute(id)); // Rule 8
 
     if (!response.ok) {
         let data = await response.json();
@@ -136,7 +138,7 @@ async function updateExercise(id) {
     muscleGroupSelector.removeAttribute("disabled")
 
     let body = getFormBody(formData);
-    let response = await sendRequest("PUT", getExercisesRoute(id), body); //Rule 8
+    let response = await sendRequest("PUT", routes.getExercisesRoute(id), body); //Rule 8
 
     if (!response.ok) {
         let data = await response.json();

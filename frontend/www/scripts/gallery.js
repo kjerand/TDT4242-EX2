@@ -1,8 +1,8 @@
-import { getWorkoutsRoute, getWorkoutsFileRoute } from "./routes";
+import routes from "./routes.js";
 
 async function retrieveWorkoutImages(id) {
   let workoutData = null; //1
-  let response = await sendRequest("GET", getWorkoutsRoute(id));
+  let response = await sendRequest("GET", routes.getWorkoutsRoute(id));
   if (!response.ok) {
     //3
     let data = await response.json(); //4
@@ -138,7 +138,7 @@ async function handleDeleteImgClick(
     return false;
   }
 
-  let response = await sendRequest(http_keyword, getWorkoutsFileRoute(id) );
+  let response = await sendRequest(http_keyword, routes.getWorkoutsFileRoute(id) );
 
   if (!response.ok) {
     let data = await response.json();
