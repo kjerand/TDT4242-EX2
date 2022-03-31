@@ -138,16 +138,20 @@ async function handleDeleteImgClick(
     return false;
   }
 
-  let response = await sendRequest(http_keyword, routes.getWorkoutsFileRoute(id) );
+  let response = await sendRequest(
+    http_keyword,
+    routes.getWorkoutsFileRoute(id)
+  );
 
   if (!response.ok) {
     let data = await response.json();
     let alert = createAlert(fail_alert_text, data);
     document.body.prepend(alert);
+    return false;
   } else {
     location.reload();
+    return true;
   }
-  return true
 }
 
 function handleGoBackToWorkoutClick() {
