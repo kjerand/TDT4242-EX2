@@ -13,15 +13,9 @@ class IsCommentVisibleToUser(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # Write permissions are only allowed to the owner.
-
-        return self.check_object_permission(obj.workout.visibility, obj.owner, obj.owner.coach, request.user)
-
-
-
-    def check_object_permission(self, workout_visiblity, workout_owner, workout_coach, user):
         return (
-            workout_visiblity == "PU"
-            or workout_owner == user
-            or (workout_visiblity== "CO" and workout_coach == user)
-            or workout_owner == user
+            obj.workout.visibility == "PU"
+            or obj.owner == request.user
+            or (obj.workout.visibility == "CO" and obj.owner.coach == request.user)
+            or obj.workout.owner == request.user
         )

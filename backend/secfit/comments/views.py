@@ -43,8 +43,15 @@ class CommentList(
             # We should replace it with a better solution.
             # Or maybe not.
 
-            qs = IsCommentVisibleToUser.check_object_permission(Comment.workout.visibility, Comment.owner, Comment.owner.coach, self.request.user)
-
+            qs = Comment.objects.filter(
+                Q(workout__visibility="PU")
+                | Q(owner=self.request.user)
+                | (
+                    Q(workout__visibility="CO")
+                    & Q(workout__owner__coach=self.request.user)
+                )
+                | Q(workout__owner=self.request.user)
+            ).distinct()
 
         return qs
 
