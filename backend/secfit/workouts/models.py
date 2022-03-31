@@ -80,6 +80,7 @@ class Exercise(models.Model):
         calories:    Calories spent per minute
         muscleGroup: What major muscle group is used in the exercise
         unit:        Name of the unit for the exercise type (e.g., reps, seconds)
+        info:        Name of the additional info for the exercise type (e.g., weight or distance)
     """
 
     name = models.CharField(max_length=100)
