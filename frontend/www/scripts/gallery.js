@@ -81,7 +81,7 @@ async function retrieveWorkoutImages(id) {
 
         if (isFirstImg) {
           //37
-          currentImageFileElement.src = file.file; //38
+          currentImageFileElement.src = fileData.file; //38
           isFirstImg = false; //39
         }
         fileCounter++; //40
