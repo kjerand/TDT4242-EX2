@@ -109,6 +109,28 @@ class WorkoutSerializer(serializers.HyperlinkedModelSerializer):
 
         return workout
 
+
+    def handle_workout_files(self, validated_data, instance):
+        if "files" in validated_data:
+            files_data = validated_data.pop("files")
+            files = instance.files
+
+            for file, file_data in zip(files.all(), files_data):
+                file.file = file_data.get("file", file.file)
+
+            # If new files have been added, creating new WorkoutFiles
+            if len(files_data) > len(files.all()):
+                for i in range(len(files.all()), len(files_data)):
+                    WorkoutFile.objects.create(
+                        workout=instance,
+                        owner=instance.owner,
+                        file=files_data[i].get("file"),
+                    )
+            # Else if files have been removed, delete WorkoutFiles
+            elif len(files_data) < len(files.all()):
+                for i in range(len(files_data), len(files.all())):
+                    files.all()[i].delete()     
+
     def update(self, instance, validated_data):
         """Custom logic for updating a Workout with its ExerciseInstances and Workouts.
 
@@ -167,26 +189,7 @@ class WorkoutSerializer(serializers.HyperlinkedModelSerializer):
                 exercise_instances.all()[i].delete()
 
         # Handle WorkoutFiles
-
-        if "files" in validated_data:
-            files_data = validated_data.pop("files")
-            files = instance.files
-
-            for file, file_data in zip(files.all(), files_data):
-                file.file = file_data.get("file", file.file)
-
-            # If new files have been added, creating new WorkoutFiles
-            if len(files_data) > len(files.all()):
-                for i in range(len(files.all()), len(files_data)):
-                    WorkoutFile.objects.create(
-                        workout=instance,
-                        owner=instance.owner,
-                        file=files_data[i].get("file"),
-                    )
-            # Else if files have been removed, delete WorkoutFiles
-            elif len(files_data) < len(files.all()):
-                for i in range(len(files_data), len(files.all())):
-                    files.all()[i].delete()
+        self.handle_workout_files(validated_data, instance)
 
         return instance
 

@@ -29,7 +29,6 @@ from workouts.serializers import ExerciseInstanceSerializer, WorkoutFileSerializ
 from django.core.exceptions import PermissionDenied
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-import json
 from collections import namedtuple
 import base64, pickle
 from django.core.signing import Signer
@@ -71,10 +70,10 @@ class RememberMe(
             return Response({"remember_me": self.rememberme()})
 
     def post(self, request):
-        cookieObject = namedtuple("Cookies", request.COOKIES.keys())(
+        cookie_object = namedtuple("Cookies", request.COOKIES.keys())(
             *request.COOKIES.values()
         )
-        user = self.get_user(cookieObject)
+        user = self.get_user(cookie_object)
         refresh = RefreshToken.for_user(user)
         return Response(
             {
@@ -83,8 +82,8 @@ class RememberMe(
             }
         )
 
-    def get_user(self, cookieObject):
-        decode = base64.b64decode(cookieObject.remember_me)
+    def get_user(self, cookie_object):
+        decode = base64.b64decode(cookie_object.remember_me)
         user, sign = pickle.loads(decode)
 
         # Validate signature

@@ -12,7 +12,6 @@ from rest_framework.filters import OrderingFilter
 class CommentList(
     mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView
 ):
-    # queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [OrderingFilter]
@@ -43,16 +42,9 @@ class CommentList(
             # The code below is kind of duplicate of the one in ./permissions.py
             # We should replace it with a better solution.
             # Or maybe not.
-            
-            qs = Comment.objects.filter(
-                Q(workout__visibility="PU")
-                | Q(owner=self.request.user)
-                | (
-                    Q(workout__visibility="CO")
-                    & Q(workout__owner__coach=self.request.user)
-                )
-                | Q(workout__owner=self.request.user)
-            ).distinct()
+
+            qs = IsCommentVisibleToUser.check_object_permission(Comment.workout.visibility, Comment.owner, Comment.owner.coach, self.request.user)
+
 
         return qs
 
