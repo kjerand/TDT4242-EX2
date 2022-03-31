@@ -1,7 +1,8 @@
 name: GitHub Actions CI
-on: 
+on:
   push:
-    - main
+    branches:
+      - main
 jobs:
   test:
     runs-on: ubuntu-latest
