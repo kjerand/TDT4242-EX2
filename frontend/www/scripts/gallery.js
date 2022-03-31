@@ -60,7 +60,7 @@ async function retrieveWorkoutImages(id) {
         deleteImgButton.type = "button"; //27
         deleteImgButton.className = "btn btn-close"; //28
         deleteImgButton.id =
-          file.url.split("/")[file.url.split("/").length - 2]; //29
+          fileData.url.split("/")[fileData.url.split("/").length - 2]; //29
         deleteImgButton.addEventListener("click", () =>
           handleDeleteImgClick(
             deleteImgButton.id,
@@ -73,7 +73,7 @@ async function retrieveWorkoutImages(id) {
         filesDeleteDiv.appendChild(deleteImgButton); //31
 
         let img = document.createElement("img"); //32
-        img.src = file.file; //33
+        img.src = fileData.file; //33
 
         filesDiv.appendChild(img); //34
         deleteImgButton.style.left = `${(fileCounter % 4) * 191}px`; //35
