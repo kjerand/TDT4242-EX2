@@ -1,4 +1,4 @@
-import { getExercise } from "./routes";
+import { getAllExercisesRoute, getExercisesRoute } from "./routes";
 
 let cancelButton;
 let okButton;
@@ -14,7 +14,7 @@ class MuscleGroup {
         this.type = this.validTypes.includes(type) ? type : undefined;
     }
 
-    setMuscleGroupType = (newType) => { //Rule 7: not consistent use of functions
+    setMuscleGroupType(newType) { //Rule 7: not consistent use of functions
         this.isValidType = false;
         
         if(this.validTypes.includes(newType)){
@@ -27,8 +27,7 @@ class MuscleGroup {
 
     }
     
-    getMuscleGroupType = () => { //Rule 7: not consistent use of functions
-        console.log(this.type, "SWIOEFIWEUFH") // remove this
+    getMuscleGroupType() {
         return this.type;
     }
 }
@@ -36,10 +35,7 @@ class MuscleGroup {
 function handleCancelButtonDuringEdit() {
     setReadOnly(true, "#form-exercise");
     document.querySelector("select").setAttribute("disabled", "")
-    okButton.className += " hide";
-    deleteButton.className += " hide";
-    cancelButton.className += " hide";
-    editButton.className = editButton.className.replace(" hide", "");
+    showEditButton();
 
     cancelButton.removeEventListener("click", handleCancelButtonDuringEdit);
 
@@ -51,15 +47,8 @@ function handleCancelButtonDuringEdit() {
     if (oldFormData.has("muscleGroup")) form.muscleGroup.value = oldFormData.get("muscleGroup");
     if (oldFormData.has("unit")) form.unit.value = oldFormData.get("unit");
     if (oldFormData.has("info")) form.unit.value = oldFormData.get("info");
-    
-    oldFormData.delete("name");
-    oldFormData.delete("description");
-    oldFormData.delete("duration");
-    oldFormData.delete("calories");
-    oldFormData.delete("muscleGroup");
-    oldFormData.delete("unit");
-    oldFormData.delete("info");
 
+    deleteOldFormData();
 }
 
 function handleCancelButtonDuringCreate() {
@@ -70,15 +59,9 @@ async function createExercise() { //Change to same name format with handle
     document.querySelector("select").removeAttribute("disabled") //Rule 7: semicolon
     let form = document.querySelector("#form-exercise");
     let formData = new FormData(form);
-    let body = {"name": formData.get("name"), 
-                "description": formData.get("description"),
-                "duration": formData.get("duration"),
-                "calories": formData.get("calories"),
-                "muscleGroup": formData.get("muscleGroup"), 
-                "unit": formData.get("unit"),
-                "info": formData.get("info")};
+    let body = getFormBody(formData);
 
-    let response = await sendRequest("POST", `${HOST}/api/exercises/`, body); //Rule 8 haed code
+    let response = await sendRequest("POST", getAllExercisesRoute(), body); //Rule 8 haed code
 
     if (response.ok) {
         window.location.replace("exercises.html");
@@ -106,7 +89,7 @@ function handleEditExerciseButtonClick() {
 }
 
 async function deleteExercise(id) {
-    let response = await sendRequest("DELETE", `${HOST}/api/exercises/${id}/`); //Rule 8
+    let response = await sendRequest("DELETE", getExerciseRoute(id)); //Rule 8
     if (!response.ok) {
         let data = await response.json();
         let alert = createAlert(`Could not delete exercise ${id}`, data);
@@ -119,8 +102,6 @@ async function deleteExercise(id) {
 async function retrieveExercise(id) {
     let response = await sendRequest("GET", getExerciseRoute(id)); // Rule 8
 
-    console.log(response.ok) //log
-
     if (!response.ok) {
         let data = await response.json();
         let alert = createAlert("Could not retrieve exercise data!", data);
@@ -132,8 +113,13 @@ async function retrieveExercise(id) {
         let formData = new FormData(form);
 
         for (let key of formData.keys()) {
-            let selector
-            key !== "muscleGroup" ? selector = `input[name="${key}"], textarea[name="${key}"]` : selector = `select[name=${key}]` //Rule 5: make it more simple
+            let selector;
+            if (key !== "muscleGroup") {
+                selector = `input[name="${key}"], textarea[name="${key}"]`
+            } else {
+                selector = `select[name=${key}]`
+            }
+            //Rule 5: make it more simple
             let input = form.querySelector(selector);
             let newVal = exerciseData[key];
             input.value = newVal;
@@ -149,16 +135,8 @@ async function updateExercise(id) {
     let muscleGroupSelector = document.querySelector("select")
     muscleGroupSelector.removeAttribute("disabled")
 
-    let selectedMuscleGroup = new MuscleGroup(formData.get("muscleGroup"));
-
-    let body = {"name": formData.get("name"), 
-                "description": formData.get("description"),
-                "duration": formData.get("duration"),
-                "calories": formData.get("calories"),
-                "muscleGroup": selectedMuscleGroup.getMuscleGroupType(),
-                "unit": formData.get("unit"),
-                "info": formData.get("info")};
-    let response = await sendRequest("PUT", `${HOST}/api/exercises/${id}/`, body); //Rule 8
+    let body = getFormBody(formData);
+    let response = await sendRequest("PUT", getExercisesRoute(id), body); //Rule 8
 
     if (!response.ok) {
         let data = await response.json();
@@ -166,24 +144,43 @@ async function updateExercise(id) {
         document.body.prepend(alert);
     } else {
         muscleGroupSelector.setAttribute("disabled", "")
-        // duplicate code from handleCancelButtonDuringEdit
-        // you should refactor this
+
         setReadOnly(true, "#form-exercise");
-        okButton.className += " hide";
-        deleteButton.className += " hide";
-        cancelButton.className += " hide";
-        editButton.className = editButton.className.replace(" hide", "");
-    
+        showEditButton();
+
         cancelButton.removeEventListener("click", handleCancelButtonDuringEdit);
-        
-        oldFormData.delete("name");
-        oldFormData.delete("description");
-        oldFormData.delete("duration");
-        oldFormData.delete("calories");
-        oldFormData.delete("muscleGroup");
-        oldFormData.delete("unit");
-        oldFormData.delete("info");
+        deleteOldFormData();
     }
+}
+
+function showEditButton() {
+    okButton.className += " hide";
+    deleteButton.className += " hide";
+    cancelButton.className += " hide";
+    editButton.className = editButton.className.replace(" hide", "");
+}
+
+function deleteOldFormData() {
+    oldFormData.delete("name");
+    oldFormData.delete("description");
+    oldFormData.delete("duration");
+    oldFormData.delete("calories");
+    oldFormData.delete("muscleGroup");
+    oldFormData.delete("unit");
+    oldFormData.delete("info");
+}
+
+function getFormBody(formData) {
+    let selectedMuscleGroup = new MuscleGroup(formData.get("muscleGroup"));
+    let body = {"name": formData.get("name"), 
+    "description": formData.get("description"),
+    "duration": formData.get("duration"),
+    "calories": formData.get("calories"),
+    "muscleGroup": selectedMuscleGroup.getMuscleGroupType(),
+    "unit": formData.get("unit"),
+    "info": formData.get("info")};
+
+    return body;
 }
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -195,16 +192,14 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     const urlParams = new URLSearchParams(window.location.search);
 
-    // view/edit
     if (urlParams.has('id')) {
         const exerciseId = urlParams.get('id');
         await retrieveExercise(exerciseId);
 
         editButton.addEventListener("click", handleEditExerciseButtonClick);
-        deleteButton.addEventListener("click", (async (id) => await deleteExercise(id)).bind(undefined, exerciseId)); //await not neccesary, sonar
-        okButton.addEventListener("click", (async (id) => await updateExercise(id)).bind(undefined, exerciseId));
+        deleteButton.addEventListener("click", (async (id) => deleteExercise(id)).bind(undefined, exerciseId)); //await not neccesary, sonar
+        okButton.addEventListener("click", (async (id) => updateExercise(id)).bind(undefined, exerciseId));
     } 
-    //create
     else {
         setReadOnly(false, "#form-exercise");
 
@@ -212,7 +207,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         okButton.className = okButton.className.replace(" hide", "");
         cancelButton.className = cancelButton.className.replace(" hide", "");
 
-        okButton.addEventListener("click", async () => await createExercise());
+        okButton.addEventListener("click", async () => createExercise());
         cancelButton.addEventListener("click", handleCancelButtonDuringCreate);
     }
 });

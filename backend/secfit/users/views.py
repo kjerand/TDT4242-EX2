@@ -1,4 +1,3 @@
-import django
 from rest_framework import mixins, generics
 from workouts.mixins import CreateListModelMixin
 from rest_framework import permissions
@@ -10,15 +9,11 @@ from users.serializers import (
     UserGetSerializer,
 )
 from rest_framework.permissions import (
-    AllowAny,
-    IsAdminUser,
-    IsAuthenticated,
     IsAuthenticatedOrReadOnly,
 )
 from users.models import Offer, AthleteFile
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
 from users.permissions import IsCurrentUser, IsAthlete, IsCoach
 from workouts.permissions import IsOwner, IsReadOnly
@@ -57,7 +52,8 @@ class UserDetail(
     lookup_field_options = ["pk", "username"]
     serializer_class = UserSerializer
     queryset = get_user_model().objects.all()
-    permission_classes = [permissions.IsAuthenticated & (IsCurrentUser | IsReadOnly)]
+    permission_classes = [permissions.IsAuthenticated & (IsCurrentUser |
+ IsReadOnly)]
 
     def get_object(self):
         for field in self.lookup_field_options:
@@ -98,7 +94,6 @@ class OfferList(
         serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        qs = Offer.objects.none()
         result = Offer.objects.none()
 
         if self.request.user:
